@@ -1,8 +1,7 @@
 // This tells Ibex you will send the results early
 var manualSendResults = true;
 var showProgressBar = true;
-var shuffleSequence = seq("consent","instructions",startsWith("Practice"),"scaleinstr","distract",randomize("experiment"),
-                            "feedback","send","debriefing","final");
+var shuffleSequence = seq("consent","instructions","scaleinstr","distract",randomize("Practice"),randomize("experiment"),"inter","feedback1","feedback2","feedback3","send","debrief");
 // rshuffle(startsWith("experiment")),rshuffle(startsWith("experiment"))
 PennController.ResetPrefix(null);
 
@@ -72,41 +71,67 @@ var items = [
             .wait( getHtml("distract form").test.complete().failure(getHtml("distract form").warn()) )
     )]
     ,
-    ["feedback", "PennController", PennController(
-        newHtml("feedback form", "SonaFeedback.html")
+    ["inter", "PennController", PennController(
+        newHtml("interlude", "preQuestionnaire.html")
+            .settings.log()
+            .print()   
+        ,
+        newButton("continue btn", "Click here to continue.")
+            .settings.bold()
+            .print()
+            .wait()                 
+      )]  
+    ,      
+    ["feedback1", "PennController", PennController(
+        newHtml("feedback form 1", "SonaFeedback1.html")
+            .settings.log()
+            .print()
+        ,
+        newButton("continue to confirm", "Click here to continue.")
+            .settings.bold()
+            .print()
+            .wait( getHtml("feedback form 1").test.complete().failure(getHtml("feedback form 1").warn()) )              
+    )]
+    ,
+    ["feedback2", "PennController", PennController(
+        newHtml("feedback form 2", "SonaFeedback2.html")
+            .settings.log()
+            .print()
+        ,
+        newButton("continue to confirm", "Click here to continue.")
+            .settings.bold()
+            .print()
+            .wait( getHtml("feedback form 2").test.complete().failure(getHtml("feedback form 2").warn()) )                
+    )]
+    ,    
+    ["feedback3", "PennController", PennController(
+        newHtml("feedback form 3", "SonaFeedback3.html")
             .settings.log()
             .print()
         ,
         newButton("continue to confirm", "Click here to confirm your participation!")
             .settings.bold()
             .print()
-            .wait()                
+            .wait( getHtml("feedback form 3").test.complete().failure(getHtml("feedback form 3").warn()) )  
     )]
-     ,
+    ,      
     ["send", "__SendResults__", {}]   
-    , 
-     ["debriefing", "PennController", PennController(
-        newHtml("confirmation form", "IbexDebriefing.html")
-             .print()
-         ,
-         newButton("continue to confirm", "Click to confirm that your answers went through.")
-             .settings.bold()
-             .print()
-            .wait()
-     )]                     
-     , // Sona only
-    ["final", "PennController", PennController(
-          newText("final message", "The results were successfully sent to the server. Thanks!")
-              .settings.bold()  
-              .settings.center()
-              .print()            
-      )]
-    
+    ,
+    ["debrief", "PennController", PennController(
+        newHtml("interlude", "IbexDebriefing.html")
+            .settings.log()
+            .print()   
+        ,
+        newButton("continue btn", "Click to exit.")
+            .settings.bold()
+            .print()
+            .wait()                 
+    )]                     
 ];
 
-PennController.GetTable( "_table-datasource-however_Sp_bel.csv" ).setLabel("Expt");
+PennController.GetTable( "datasource-however_Sp_bel.csv" ).setLabel("Expt");
 
-PennController.FeedItems( PennController.GetTable( "_table-datasource-however_Sp_bel.csv" ).filter("Expt","experiment"),
+PennController.FeedItems( PennController.GetTable( "datasource-however_Sp_bel.csv" ).filter("Expt","experiment"),
     (item) => PennController(
         newTimer("blank", 1000)
             .start()
@@ -143,10 +168,10 @@ PennController.FeedItems( PennController.GetTable( "_table-datasource-however_Sp
         newCanvas("answerbox", 800, 150)
          //   .settings.add(25,40, newText("prompt", item.Prompt).settings.size(700, 30).settings.bold() )   
             .settings.add(25,40, newText("claim", item.Claim).settings.size(700, 30) ) 
-            .settings.add(25,95, newText("labelLeft", "No").settings.bold() )
-            .settings.add(50,90, getScale("answer").settings.size(200, 0) )
-            .settings.add(285,95, newText("labeRight", "Yes").settings.bold() )
-            .settings.add(145,115, newText("labelMid", "Maybe").settings.bold() )            
+            .settings.add(25,85, newText("labelLeft", "No").settings.bold() )
+            .settings.add(50,80, getScale("answer").settings.size(200, 0) )
+            .settings.add(285,85, newText("labeRight", "Yes").settings.bold() )
+            .settings.add(145,110, newText("labelMid", "Maybe").settings.bold() )            
             .print()   
         ,
         newText("warning","Please select a response.")
