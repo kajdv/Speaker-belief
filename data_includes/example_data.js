@@ -24,8 +24,8 @@ PennController.ResetPrefix(null);
 
 var items = [
 
-    // ["setcounter", "__SetCounter__", { } ] // DO I NEED THIS?
-    // ,    
+  //  ["setcounter", "__SetCounter__", { } ] // DO I NEED THIS?
+   // ,    
     ["consent", "PennController", PennController(
         newHtml("consent", "SonaConsent.html")
             .settings.log()
@@ -202,11 +202,8 @@ PennController.FeedItems( PennController.GetTable( "datasource-however_Sp_bel.cs
     .log("Item", item.Item)
     .log("NoExpt", item.NoExpt)
     .log("EmbCondition", item.EmbCondition)
-    .log("Background", item.Background)
-    .log("Prompt", item.Prompt)    
-    .log("Stims", item.Stims)
-    .log("Claim", item.Claim)
-    .log("mcpred", item.mcpred)
+    .log("mcpred", item.mcpred) 
+    .log("ID", PennController.GetURLParameter("id"))  
 );
 
 
